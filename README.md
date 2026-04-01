@@ -8,17 +8,17 @@ This project demonstrates a simple User Management System with the following sco
 
 - REST API for CRUD operations
 - Clean Architecture with 4 layers
+- LINQ for querying and ordering user data
 - FluentValidation for request validation
 - Entity Framework Core for persistence
 - Swagger for API documentation
-
-No authentication, authorization, caching, messaging, frontend, or advanced architectural patterns are included.
 
 ## Tech Stack
 
 - .NET 8
 - ASP.NET Core Web API
 - Entity Framework Core
+- LINQ
 - SQL Server provider for EF Core
 - FluentValidation
 - Swagger / Swashbuckle

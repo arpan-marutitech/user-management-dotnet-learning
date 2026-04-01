@@ -23,7 +23,12 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<User>> GetAllAsync()
     {
-        return await _context.Users.AsNoTracking().ToListAsync();
+        return await _context.Users
+            .AsNoTracking()
+            .Where(x => !string.IsNullOrWhiteSpace(x.Email))
+            .OrderBy(x => x.FirstName)
+            .ThenBy(x => x.LastName)
+            .ToListAsync();
     }
 
     public async Task<User?> GetByIdAsync(Guid id)
