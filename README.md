@@ -8,11 +8,12 @@ This project demonstrates a simple User Management System with the following sco
 
 - REST API for CRUD operations
 - Clean Architecture with 4 layers
+- JWT Authentication (Register + Login)
 - MediatR for CQRS (Commands and Queries)
 - LINQ for querying and ordering user data
 - FluentValidation for request validation
 - Entity Framework Core for persistence
-- Swagger for API documentation
+- Swagger for API documentation (Bearer auth supported)
 
 ## Tech Stack
 
@@ -21,6 +22,8 @@ This project demonstrates a simple User Management System with the following sco
 - Entity Framework Core
 - LINQ
 - MediatR
+- JWT Bearer Authentication
+- BCrypt password hashing
 - SQL Server provider for EF Core
 - FluentValidation
 - Swagger
@@ -40,9 +43,10 @@ UserManagement.slnx
 
 ### Domain
 
-Contains the core business entity:
+Contains the core business entities:
 
 - User
+- AuthCredential
 
 ### Application
 
@@ -53,6 +57,7 @@ Contains:
 - FluentValidation validators
 - MediatR Commands and Handlers
 - MediatR Queries and Handlers
+- Register / Login Commands and Handlers
 
 ### Infrastructure
 
@@ -77,6 +82,8 @@ Contains:
 - Get user by id
 - Update user
 - Delete user
+- Register auth user
+- Login and receive JWT token
 
 ## Validation Rules
 
@@ -84,7 +91,16 @@ Contains:
 - LastName: required, 2 to 50 characters
 - Email: required, valid email format
 
-## API Endpoints
+## Auth Endpoints
+
+| Method | Endpoint | Auth Required | Description |
+|--------|----------|---------------|-------------|
+| POST | /api/auth/register | No | Register a new auth user |
+| POST | /api/auth/login | No | Login and receive JWT token |
+
+## User Endpoints (Protected)
+
+> All user endpoints require a valid JWT token in the `Authorization: Bearer {token}` header.
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -137,6 +153,13 @@ dotnet build UserManagement.slnx
 ```powershell
 dotnet run --project src/UserManagement.API/UserManagement.API.csproj
 ```
+
+## Using JWT Auth in Swagger
+
+1. Call `POST /api/auth/register` with a username and password
+2. Call `POST /api/auth/login` — copy the `token` from the response
+3. Click **Authorize** in Swagger UI, enter `Bearer {token}`
+4. All user endpoints are now accessible
 
 ## Swagger
 

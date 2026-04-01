@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using UserManagement.Application.Interfaces;
 using UserManagement.Infrastructure.Persistence;
 using UserManagement.Infrastructure.Repositories;
+using UserManagement.Infrastructure.Services;
 
 namespace UserManagement.Infrastructure.DependencyInjection;
 
@@ -17,6 +18,8 @@ public static class ServiceCollectionExtensions
             options.UseSqlServer(connectionString));
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAuthRepository, AuthRepository>();
+        services.AddScoped<ITokenService, TokenService>();
 
         return services;
     }
