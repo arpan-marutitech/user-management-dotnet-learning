@@ -87,9 +87,28 @@ Contains:
 
 ## Validation Rules
 
+### User DTOs
+
 - FirstName: required, 2 to 50 characters
 - LastName: required, 2 to 50 characters
 - Email: required, valid email format
+
+### Auth DTOs
+
+Register (POST /api/auth/register)
+
+- Username: required, 3 to 50 characters
+- Username: letters, digits, and underscore only
+- Password: required, 8 to 100 characters
+- Password: must include at least one uppercase letter
+- Password: must include at least one lowercase letter
+- Password: must include at least one digit
+- Password: must include at least one special character
+
+Login (POST /api/auth/login)
+
+- Username: required, max 50 characters
+- Password: required, max 100 characters
 
 ## Auth Endpoints
 
