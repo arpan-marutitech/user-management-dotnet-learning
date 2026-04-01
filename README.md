@@ -23,7 +23,7 @@ This project demonstrates a simple User Management System with the following sco
 - MediatR
 - SQL Server provider for EF Core
 - FluentValidation
-- Swagger / Swashbuckle
+- Swagger
 
 ## Solution Structure
 
