@@ -21,7 +21,7 @@ This project demonstrates a simple User Management System with the following sco
 - LINQ
 - SQL Server provider for EF Core
 - FluentValidation
-- Swagger / Swashbuckle
+- Swagger
 
 ## Solution Structure
 
