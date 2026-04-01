@@ -8,6 +8,7 @@ This project demonstrates a simple User Management System with the following sco
 
 - REST API for CRUD operations
 - Clean Architecture with 4 layers
+- MediatR for CQRS (Commands and Queries)
 - LINQ for querying and ordering user data
 - FluentValidation for request validation
 - Entity Framework Core for persistence
@@ -19,6 +20,7 @@ This project demonstrates a simple User Management System with the following sco
 - ASP.NET Core Web API
 - Entity Framework Core
 - LINQ
+- MediatR
 - SQL Server provider for EF Core
 - FluentValidation
 - Swagger / Swashbuckle
@@ -49,6 +51,8 @@ Contains:
 - DTOs
 - Repository interfaces
 - FluentValidation validators
+- MediatR Commands and Handlers
+- MediatR Queries and Handlers
 
 ### Infrastructure
 

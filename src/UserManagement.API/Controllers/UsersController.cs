@@ -1,7 +1,8 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using UserManagement.Application.Commands;
 using UserManagement.Application.DTOs;
-using UserManagement.Application.Interfaces;
-using UserManagement.Domain.Entities;
+using UserManagement.Application.Queries;
 
 namespace UserManagement.API.Controllers;
 
@@ -9,53 +10,50 @@ namespace UserManagement.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IMediator _mediator;
 
-    public UsersController(IUserRepository userRepository)
+    public UsersController(IMediator mediator)
     {
-        _userRepository = userRepository;
+        _mediator = mediator;
     }
 
     [HttpPost]
     public async Task<ActionResult<UserResponseDto>> Create([FromBody] CreateUserDto request)
     {
-        var user = new User
+        var command = new CreateUserCommand
         {
-            Id = Guid.NewGuid(),
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email
         };
 
-        var createdUser = await _userRepository.AddAsync(user);
-        var response = ToResponse(createdUser);
-
+        var response = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserResponseDto>>> GetAll()
     {
-        var users = await _userRepository.GetAllAsync();
-        return Ok(users.Select(ToResponse));
+        var users = await _mediator.Send(new GetAllUsersQuery());
+        return Ok(users);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<UserResponseDto>> GetById(Guid id)
     {
-        var user = await _userRepository.GetByIdAsync(id);
+        var user = await _mediator.Send(new GetUserByIdQuery { Id = id });
         if (user is null)
         {
             return NotFound();
         }
 
-        return Ok(ToResponse(user));
+        return Ok(user);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<UserResponseDto>> Update(Guid id, [FromBody] UpdateUserDto request)
     {
-        var user = new User
+        var command = new UpdateUserCommand
         {
             Id = id,
             FirstName = request.FirstName,
@@ -63,35 +61,24 @@ public class UsersController : ControllerBase
             Email = request.Email
         };
 
-        var updated = await _userRepository.UpdateAsync(user);
-        if (!updated)
+        var response = await _mediator.Send(command);
+        if (response is null)
         {
             return NotFound();
         }
 
-        return Ok(ToResponse(user));
+        return Ok(response);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var deleted = await _userRepository.DeleteAsync(id);
+        var deleted = await _mediator.Send(new DeleteUserCommand { Id = id });
         if (!deleted)
         {
             return NotFound();
         }
 
         return Ok();
-    }
-
-    private static UserResponseDto ToResponse(User user)
-    {
-        return new UserResponseDto
-        {
-            Id = user.Id,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email
-        };
     }
 }
