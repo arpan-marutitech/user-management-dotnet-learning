@@ -1,0 +1,145 @@
+# User Management API
+
+Minimal .NET 8 Web API demo built with Clean Architecture for user management CRUD operations.
+
+## Overview
+
+This project demonstrates a simple User Management System with the following scope:
+
+- REST API for CRUD operations
+- Clean Architecture with 4 layers
+- FluentValidation for request validation
+- Entity Framework Core for persistence
+- Swagger for API documentation
+
+No authentication, authorization, caching, messaging, frontend, or advanced architectural patterns are included.
+
+## Tech Stack
+
+- .NET 8
+- ASP.NET Core Web API
+- Entity Framework Core
+- SQL Server provider for EF Core
+- FluentValidation
+- Swagger / Swashbuckle
+
+## Solution Structure
+
+```text
+src/
+  UserManagement.API/
+  UserManagement.Application/
+  UserManagement.Domain/
+  UserManagement.Infrastructure/
+UserManagement.slnx
+```
+
+## Clean Architecture Layers
+
+### Domain
+
+Contains the core business entity:
+
+- User
+
+### Application
+
+Contains:
+
+- DTOs
+- Repository interfaces
+- FluentValidation validators
+
+### Infrastructure
+
+Contains:
+
+- EF Core DbContext
+- Repository implementation
+- Database configuration
+
+### API
+
+Contains:
+
+- Controllers
+- Swagger configuration
+- Dependency injection bootstrap
+
+## Features
+
+- Create user
+- Get all users
+- Get user by id
+- Update user
+- Delete user
+
+## Validation Rules
+
+- FirstName: required, 2 to 50 characters
+- LastName: required, 2 to 50 characters
+- Email: required, valid email format
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/users | Create a user |
+| GET | /api/users | Get all users |
+| GET | /api/users/{id} | Get user by id |
+| PUT | /api/users/{id} | Update user |
+| DELETE | /api/users/{id} | Delete user |
+
+## Database Configuration
+
+The current project is configured to use SQL Server because the provided connection string is SQL Server format.
+
+Set the connection string in:
+
+- `src/UserManagement.API/appsettings.json` for a shared default
+- `src/UserManagement.API/appsettings.Development.json` for local development overrides
+
+Example:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=YOUR_SERVER;Database=DotNet_Order_Management;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
+  }
+}
+```
+
+## Running the Project
+
+### Prerequisites
+
+- .NET 8 SDK
+- SQL Server instance accessible from your machine
+
+### Restore
+
+```powershell
+dotnet restore UserManagement.slnx
+```
+
+### Build
+
+```powershell
+dotnet build UserManagement.slnx
+```
+
+### Run
+
+```powershell
+dotnet run --project src/UserManagement.API/UserManagement.API.csproj
+```
+
+## Swagger
+
+After running the API, open Swagger UI at:
+
+```text
+https://localhost:<port>/swagger
+or
+http://localhost:<port>/swagger
+```

@@ -1,0 +1,16 @@
+bin/
+obj/
+.vs/
+.idea/
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+src/**/bin/
+src/**/obj/
+src/**/.idea/
+
+src/UserManagement.API/appsettings.Development.json
