@@ -15,6 +15,7 @@ This project demonstrates a simple User Management System with the following sco
 - Polly resilience strategies for transient fault handling
 - Entity Framework Core for persistence
 - Swagger for API documentation (Bearer auth supported)
+- Separate Design Patterns console examples for learning core OOP patterns
 
 ## Tech Stack
 
@@ -38,7 +39,49 @@ src/
   UserManagement.Application/
   UserManagement.Domain/
   UserManagement.Infrastructure/
+  DesignPatterns/
 UserManagement.slnx
+```
+
+## Design Patterns Examples
+
+The solution includes a dedicated console app at `src/DesignPatterns` with basic examples.
+
+### Included Patterns
+
+- Simple Factory
+- Factory Method
+- Abstract Factory
+- Builder
+- Prototype
+- Singleton
+- Repository
+- Chain of Responsibility
+- Mediator
+
+### Design Patterns Structure
+
+```text
+src/DesignPatterns/
+  Creational/
+    SimpleFactory/
+    FactoryMethod/
+    AbstractFactory/
+    Builder/
+    Prototype/
+    Singleton/
+  Architectural/
+    Repository/
+  Behavioral/
+    ChainOfResponsibility/
+    Mediator/
+  Program.cs
+```
+
+### Run Design Patterns Demo
+
+```powershell
+dotnet run --project src/DesignPatterns/DesignPatterns.csproj
 ```
 
 ## Clean Architecture Layers
