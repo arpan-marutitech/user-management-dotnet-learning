@@ -53,18 +53,4 @@ public class AuthController : ControllerBase
 
         return Ok(response);
     }
-
-    [HttpOptions("register")]
-    public IActionResult RegisterOptions()
-    {
-        Response.Headers.Append("Allow", "POST, OPTIONS");
-        return Ok();
-    }
-
-    [HttpOptions("login")]
-    public IActionResult LoginOptions()
-    {
-        Response.Headers.Append("Allow", "POST, OPTIONS");
-        return Ok();
-    }
 }
