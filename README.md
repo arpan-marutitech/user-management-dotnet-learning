@@ -181,6 +181,51 @@ dotnet build UserManagement.slnx
 dotnet run --project src/UserManagement.API/UserManagement.API.csproj
 ```
 
+## Unit Testing
+
+### Test Project
+
+The solution includes a comprehensive xUnit test project (`UserManagement.Tests`) with 33 unit tests covering:
+
+| Category | Test Count | Coverage |
+|----------|-----------|----------|
+| Validators | 10 | Create/Update User DTOs, Register/Login DTOs |
+| Repositories | 14 | User and Auth repository CRUD operations |
+| Handlers | 8 | MediatR command handlers for user and auth |
+| Resilience | 2 | Polly retry and success scenarios |
+| **Total** | **33** | **Core business logic** |
+
+### Running Tests
+
+```powershell
+# Run all tests
+dotnet test src/UserManagement.Tests/UserManagement.Tests.csproj
+
+```
+
+### Test Organization
+
+```
+src/UserManagement.Tests/
+  Validators/
+    CreateUserValidatorTests.cs         (6 tests)
+    RegisterDtoValidatorTests.cs        (4 tests)
+  Repositories/
+    UserRepositoryTests.cs             (7 tests)
+    AuthRepositoryTests.cs             (5 tests)
+  Handlers/
+    CreateUserCommandHandlerTests.cs    (2 tests)
+    LoginCommandHandlerTests.cs         (3 tests)
+  Resilience/
+    ResiliencePipelineTests.cs          (2 tests)
+```
+
+### Test Isolation
+
+- All tests use **in-memory databases** — no data persists to SQL Server
+- Each test runs in isolation with its own temporary database instance
+- Tests are completely safe to run repeatedly without affecting production data
+
 ## Using JWT Auth in Swagger
 
 1. Call `POST /api/auth/register` with a username and password

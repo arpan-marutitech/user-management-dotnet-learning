@@ -5,9 +5,9 @@ using Polly.Timeout;
 
 namespace UserManagement.Infrastructure.Resilience;
 
-internal static class ResiliencePipelines
+public static class ResiliencePipelines
 {
-    internal static readonly ResiliencePipeline DatabaseRead = new ResiliencePipelineBuilder()
+    public static readonly ResiliencePipeline DatabaseRead = new ResiliencePipelineBuilder()
         .AddRetry(new RetryStrategyOptions
         {
             MaxRetryAttempts = 3,
