@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/DesignPatterns/DesignPatterns.csproj" />
     <Project Path="src/UserManagement.API/UserManagement.API.csproj" />
     <Project Path="src/UserManagement.Application/UserManagement.Application.csproj" />
     <Project Path="src/UserManagement.Domain/UserManagement.Domain.csproj" />
