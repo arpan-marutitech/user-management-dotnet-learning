@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UserManagement.Application.Interfaces;
 using UserManagement.Domain.Entities;
 using UserManagement.Infrastructure.Persistence;
+using UserManagement.Infrastructure.Resilience;
 
 namespace UserManagement.Infrastructure.Repositories;
 
@@ -23,17 +24,23 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<User>> GetAllAsync()
     {
-        return await _context.Users
-            .AsNoTracking()
-            .Where(x => !string.IsNullOrWhiteSpace(x.Email))
-            .OrderBy(x => x.FirstName)
-            .ThenBy(x => x.LastName)
-            .ToListAsync();
+        return await ResiliencePipelines.DatabaseRead.ExecuteAsync(
+            async cancellationToken => await _context.Users
+                .AsNoTracking()
+                .Where(x => !string.IsNullOrWhiteSpace(x.Email))
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ToListAsync(cancellationToken),
+            CancellationToken.None);
     }
 
     public async Task<User?> GetByIdAsync(Guid id)
     {
-        return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return await ResiliencePipelines.DatabaseRead.ExecuteAsync(
+            async cancellationToken => await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken),
+            CancellationToken.None);
     }
 
     public async Task<bool> UpdateAsync(User user)

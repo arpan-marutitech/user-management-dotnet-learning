@@ -12,6 +12,7 @@ This project demonstrates a simple User Management System with the following sco
 - MediatR for CQRS (Commands and Queries)
 - LINQ for querying and ordering user data
 - FluentValidation for request validation
+- Polly resilience strategies for transient fault handling
 - Entity Framework Core for persistence
 - Swagger for API documentation (Bearer auth supported)
 
@@ -26,6 +27,7 @@ This project demonstrates a simple User Management System with the following sco
 - BCrypt password hashing
 - SQL Server provider for EF Core
 - FluentValidation
+- Polly
 - Swagger
 
 ## Solution Structure
@@ -66,6 +68,7 @@ Contains:
 - EF Core DbContext
 - Repository implementation
 - Database configuration
+- Polly resilience pipelines for database read and lookup operations
 
 ### API
 
@@ -132,6 +135,11 @@ Login (POST /api/auth/login)
 ## Database Configuration
 
 The current project is configured to use SQL Server because the provided connection string is SQL Server format.
+
+Transient SQL failures are handled in two layers:
+
+- EF Core SQL Server execution strategy retries connection-level transient failures
+- Polly resilience pipeline adds retry, circuit breaker, and timeout strategies to repository read and lookup operations
 
 Set the connection string in:
 

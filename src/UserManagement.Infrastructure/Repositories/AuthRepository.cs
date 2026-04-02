@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UserManagement.Application.Interfaces;
 using UserManagement.Domain.Entities;
 using UserManagement.Infrastructure.Persistence;
+using UserManagement.Infrastructure.Resilience;
 
 namespace UserManagement.Infrastructure.Repositories;
 
@@ -16,7 +17,10 @@ public class AuthRepository : IAuthRepository
 
     public async Task<bool> UsernameExistsAsync(string username)
     {
-        return await _context.AuthCredentials.AnyAsync(x => x.Username == username);
+        return await ResiliencePipelines.DatabaseRead.ExecuteAsync(
+            async cancellationToken => await _context.AuthCredentials
+                .AnyAsync(x => x.Username == username, cancellationToken),
+            CancellationToken.None);
     }
 
     public async Task AddAsync(AuthCredential credential)
@@ -27,6 +31,9 @@ public class AuthRepository : IAuthRepository
 
     public async Task<AuthCredential?> GetByUsernameAsync(string username)
     {
-        return await _context.AuthCredentials.FirstOrDefaultAsync(x => x.Username == username);
+        return await ResiliencePipelines.DatabaseRead.ExecuteAsync(
+            async cancellationToken => await _context.AuthCredentials
+                .FirstOrDefaultAsync(x => x.Username == username, cancellationToken),
+            CancellationToken.None);
     }
 }
