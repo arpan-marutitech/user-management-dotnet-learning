@@ -4,6 +4,7 @@
     <Project Path="src/UserManagement.API/UserManagement.API.csproj" />
     <Project Path="src/UserManagement.Application/UserManagement.Application.csproj" />
     <Project Path="src/UserManagement.Domain/UserManagement.Domain.csproj" />
+    <Project Path="src/UserManagement.FastEndpoints/UserManagement.FastEndpoints.csproj" />
     <Project Path="src/UserManagement.Infrastructure/UserManagement.Infrastructure.csproj" />
     <Project Path="src/UserManagement.Tests/UserManagement.Tests.csproj" />
   </Folder>

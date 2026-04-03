@@ -1,9 +1,10 @@
 using System.Text;
+using FastEndpoints;
+using FastEndpoints.Swagger;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using UserManagement.Application.Commands;
 using UserManagement.Application.Validators;
 using UserManagement.Infrastructure.DependencyInjection;
@@ -12,6 +13,7 @@ using UserManagement.Infrastructure.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddFastEndpoints();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ApiCorsPolicy", policy =>
@@ -23,27 +25,14 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.SwaggerDocument(options =>
 {
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    options.DocumentSettings = document =>
     {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Enter your JWT token. Example: Bearer {token}"
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-            },
-            Array.Empty<string>()
-        }
-    });
+        document.Title = "User Management API";
+        document.Version = "v1";
+    };
+    options.EnableJWTBearerAuth = true;
 });
 
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -79,13 +68,13 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.EnsureCreated();
 }
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
 app.UseCors("ApiCorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseFastEndpoints();
+app.UseSwaggerGen();
 
 app.MapControllers();
 

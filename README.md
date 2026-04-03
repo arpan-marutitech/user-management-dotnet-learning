@@ -12,6 +12,7 @@ This project demonstrates a simple User Management System with the following sco
 - MediatR for CQRS (Commands and Queries)
 - LINQ for querying and ordering user data
 - FluentValidation for request validation
+- FastEndpoints support alongside existing MVC controllers
 - Polly resilience strategies for transient fault handling
 - Entity Framework Core for persistence
 - Swagger for API documentation (Bearer auth supported)
@@ -28,6 +29,7 @@ This project demonstrates a simple User Management System with the following sco
 - BCrypt password hashing
 - SQL Server provider for EF Core
 - FluentValidation
+- FastEndpoints
 - Polly
 - Swagger
 
@@ -118,6 +120,7 @@ Contains:
 Contains:
 
 - Controllers
+- FastEndpoints-based endpoint classes
 - Swagger configuration
 - Dependency injection bootstrap
 
@@ -130,6 +133,7 @@ Contains:
 - Delete user
 - Register auth user
 - Login and receive JWT token
+- Parallel FastEndpoints auth and user endpoints
 
 ## Validation Rules
 
@@ -156,12 +160,21 @@ Login (POST /api/auth/login)
 - Username: required, max 50 characters
 - Password: required, max 100 characters
 
+The same FluentValidation rules are also applied to the FastEndpoints auth and user endpoints.
+
 ## Auth Endpoints
 
 | Method | Endpoint | Auth Required | Description |
 |--------|----------|---------------|-------------|
 | POST | /api/auth/register | No | Register a new auth user |
 | POST | /api/auth/login | No | Login and receive JWT token |
+
+## FastEndpoints Auth Endpoints
+
+| Method | Endpoint | Auth Required | Description |
+|--------|----------|---------------|-------------|
+| POST | /fe/auth/register | No | Register a new auth user using FastEndpoints |
+| POST | /fe/auth/login | No | Login and receive JWT token using FastEndpoints |
 
 ## User Endpoints (Protected)
 
@@ -174,6 +187,25 @@ Login (POST /api/auth/login)
 | GET | /api/users/{id} | Get user by id |
 | PUT | /api/users/{id} | Update user |
 | DELETE | /api/users/{id} | Delete user |
+
+## FastEndpoints User Endpoints (Protected)
+
+> FastEndpoints user routes also use JWT authentication.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /fe/users | Create a user |
+| GET | /fe/users | Get all users |
+| GET | /fe/users/{id} | Get user by id |
+| PUT | /fe/users/{id} | Update user |
+| DELETE | /fe/users/{id} | Delete user |
+
+## FastEndpoints Notes
+
+- Existing controller endpoints were kept unchanged.
+- FastEndpoints were added in parallel for learning and comparison purposes.
+- Swagger now shows both controller routes and FastEndpoints routes.
+- FastEndpoints validation reuses the same FluentValidation rules as the normal API flow.
 
 ## Database Configuration
 
@@ -276,6 +308,26 @@ src/UserManagement.Tests/
 3. Click **Authorize** in Swagger UI, enter `Bearer {token}`
 4. All user endpoints are now accessible
 
+### FastEndpoints Auth Flow
+
+If you are testing FastEndpoints routes, register first and then login using the exact same credentials:
+
+```bash
+curl -X POST "http://localhost:5210/fe/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "Fe1",
+    "password": "Admin@123"
+  }'
+
+curl -X POST "http://localhost:5210/fe/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "Fe1",
+    "password": "Admin@123"
+  }'
+```
+
 ## Swagger
 
 After running the API, open Swagger UI at:
@@ -285,3 +337,8 @@ https://localhost:<port>/swagger
 or
 http://localhost:<port>/swagger
 ```
+
+Swagger includes both:
+
+- MVC controller endpoints under `/api/...`
+- FastEndpoints routes under `/fe/...`
